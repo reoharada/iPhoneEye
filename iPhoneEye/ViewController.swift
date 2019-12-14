@@ -21,17 +21,22 @@ class ViewController: UIViewController {
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var recognizeLabel: UILabel!
     
+    /**** カメラ ****/
     var captureDevice = AVCaptureDevice.default(for: .video)
     var captureSession = AVCaptureSession()
     var captureDeviceInput: AVCaptureInput!
     var captureVideoDataOutput = AVCaptureVideoDataOutput()
     var previewLayer: AVCaptureVideoPreviewLayer!
-    
     let queName = "videoQue"
+    /**** カメラ ****/
     
+    /**** 画像認識 ****/
+    var audioSession: AVAudioSession? = AVAudioSession.sharedInstance()
     var coreMLModel: VNCoreMLModel!
     var request: VNCoreMLRequest!
+    /**** 画像認識 ****/
     
+    /**** 音声認識 ****/
     let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "ja-JP"))
     var recognitionRequest: SFSpeechAudioBufferRecognitionRequest!
     var recognitionTask: SFSpeechRecognitionTask!
@@ -39,6 +44,12 @@ class ViewController: UIViewController {
     
     let startText = "起動"
     let stopText = "停止"
+    /**** 音声認識 ****/
+    
+    /**** 発声 ****/
+    let synthesizer = AVSpeechSynthesizer()
+    let appStartVoice = "スタートとするときは伊藤くん起動といってください"
+    /**** 発声 ****/
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,19 +58,24 @@ class ViewController: UIViewController {
         initSpeechRecognizer()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        synthesizer.speechWithJP(appStartVoice)
+        synthesizer.delegate = self
+    }
+    
     fileprivate func initSpeechRecognizer() {
         SFSpeechRecognizer.requestAuthorization { (status) in
             print(status)
         }
         
-        let audioSession = AVAudioSession.sharedInstance()
-        try? audioSession.setCategory(.record, mode: .measurement, options: .defaultToSpeaker)
-        try? audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        try? audioSession?.setCategory(.playAndRecord, mode: .measurement, options: .defaultToSpeaker)
+        try? audioSession?.setActive(true, options: .notifyOthersOnDeactivation)
 
         self.recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest.shouldReportPartialResults = true
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
-            print(error)
+            //print(error)
             if let result = result {
                 if let str = result.bestTranscription.segments.last?.substring {
                     self.recognizeLabel.text = str
@@ -77,7 +93,7 @@ class ViewController: UIViewController {
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             self.recognitionRequest?.append(buffer)
         }
-        
+
         audioEngine.prepare()
         try? audioEngine.start()
     }
@@ -124,8 +140,12 @@ class ViewController: UIViewController {
                 let mappedData = prefixData.compactMap {"\(Int($0.confidence*100))% \($0.identifier.components(separatedBy: ",")[0])"}
                 self.resultLabel.text = mappedData.joined(separator: ",")
                 if prefixData.count > 0 {
-                    self.resultImageView.image = UIImage(named: prefixData.first!.identifier.components(separatedBy: ",")[0])
+                    let dataName = prefixData.first!.identifier.components(separatedBy: ",")[0]
+                    self.resultImageView.image = UIImage(named: dataName)
                     self.resultImageView.alpha = CGFloat(prefixData.first!.confidence)
+                    if !self.synthesizer.continueSpeaking() {
+                        self.synthesizer.speechWithJP("3メートル先に"+dataName+"があります")
+                    }
                 }
             }
         })
@@ -142,5 +162,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         if request != nil {
             try? VNImageRequestHandler(cvPixelBuffer: pixellBuffer, options: [:]).perform([request])
         }
+    }
+}
+
+extension AVSpeechSynthesizer {
+    func speechWithJP(_ text: String) {
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        self.speak(utterance)
     }
 }
