@@ -168,13 +168,15 @@ class ViewController: UIViewController {
                 if prefixData.count > 0 {
                     let dataName = prefixData.first!.identifier.components(separatedBy: ",")[0]
                     self.resultImageView.image = UIImage(named: dataName)
-                    self.resultImageView.alpha = CGFloat(prefixData.first!.confidence)
+                    print(prefixData.first!.confidence)
                     if self.beforeObserveThing != dataName && self.enableObserve && dataName != self.speechExcludeStr {
                         self.startTimerA()
-                        let speechText = "1メートル先に"+dataName
-                        self.speechLabel.text = speechText
-                        self.synthesizer.speechWithJP(speechText)
-                        self.beforeObserveThing = dataName
+                        if prefixData.first!.confidence > Float(0.95) {
+                            let speechText = "1メートル先に"+dataName
+                            self.speechLabel.text = speechText
+                            self.synthesizer.speechWithJP(speechText)
+                            self.beforeObserveThing = dataName
+                        }
                     }
                 }
             }
