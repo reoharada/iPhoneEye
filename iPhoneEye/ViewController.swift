@@ -15,11 +15,15 @@ import CoreML
 import Speech
 
 class ViewController: UIViewController {
-        
+    
     @IBOutlet weak var resultLabel: UILabel!
     @IBOutlet weak var resultImageView: UIImageView!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var recognizeLabel: UILabel!
+    @IBOutlet weak var speechLabel: UILabel!
+    
+    var beforeObserveThing = ""
+    let humanStr = "人間"
     
     /**** カメラ ****/
     var captureDevice = AVCaptureDevice.default(for: .video)
@@ -48,7 +52,7 @@ class ViewController: UIViewController {
     
     /**** 発声 ****/
     let synthesizer = AVSpeechSynthesizer()
-    let appStartVoice = "スタートとするときは伊藤くん起動といってください"
+    let appStartVoice = "スタートとするときは起動といってください"
     /**** 発声 ****/
     
     override func viewDidLoad() {
@@ -61,7 +65,6 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         synthesizer.speechWithJP(appStartVoice)
-        synthesizer.delegate = self
     }
     
     fileprivate func initSpeechRecognizer() {
@@ -71,7 +74,7 @@ class ViewController: UIViewController {
         
         try? audioSession?.setCategory(.playAndRecord, mode: .measurement, options: .defaultToSpeaker)
         try? audioSession?.setActive(true, options: .notifyOthersOnDeactivation)
-
+        
         self.recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest.shouldReportPartialResults = true
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest, resultHandler: { (result, error) in
@@ -93,7 +96,7 @@ class ViewController: UIViewController {
         audioEngine.inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             self.recognitionRequest?.append(buffer)
         }
-
+        
         audioEngine.prepare()
         try? audioEngine.start()
     }
@@ -143,8 +146,11 @@ class ViewController: UIViewController {
                     let dataName = prefixData.first!.identifier.components(separatedBy: ",")[0]
                     self.resultImageView.image = UIImage(named: dataName)
                     self.resultImageView.alpha = CGFloat(prefixData.first!.confidence)
-                    if !self.synthesizer.continueSpeaking() {
-                        self.synthesizer.speechWithJP("3メートル先に"+dataName+"があります")
+                    if self.beforeObserveThing != dataName {
+                        let speechText = "3メートル先に"+dataName+"があります"
+                        self.speechLabel.text = speechText
+                        self.synthesizer.speechWithJP(speechText)
+                        self.beforeObserveThing = dataName
                     }
                 }
             }
@@ -162,13 +168,28 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         if request != nil {
             try? VNImageRequestHandler(cvPixelBuffer: pixellBuffer, options: [:]).perform([request])
         }
+        DispatchQueue.main.async {
+            let ciImage = CIImage(cvPixelBuffer: pixellBuffer)
+            let humanNumber = iPhoneEyeCIDetector.shareInstance.findHuman(ciImage)
+            if humanNumber > 0 {
+                if self.beforeObserveThing != self.humanStr {
+                    self.beforeObserveThing = self.humanStr
+                    let speechText = "前方に\(humanNumber)人の人間がいます"
+                    self.synthesizer.speechWithJP(speechText)
+                    self.speechLabel.text = speechText
+                }
+            }
+        }
     }
+    
 }
 
 extension AVSpeechSynthesizer {
     func speechWithJP(_ text: String) {
-        let utterance = AVSpeechUtterance(string: text)
-        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-        self.speak(utterance)
+        if !self.continueSpeaking() {
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+            self.speak(utterance)
+        }
     }
 }

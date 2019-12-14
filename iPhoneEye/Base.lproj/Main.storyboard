@@ -42,6 +42,20 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgZ-he-GmC">
+                                <rect key="frame" x="155" y="107.5" width="0.0" height="0.0"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="しゃべる文字列：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAk-HD-avL">
+                                <rect key="frame" x="8" y="97" width="139" height="21"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -50,9 +64,12 @@
                             <constraint firstItem="ztO-iM-t0z" firstAttribute="centerY" secondItem="62C-T9-Sx5" secondAttribute="centerY" id="8tP-jE-C5y"/>
                             <constraint firstAttribute="bottom" secondItem="kih-4l-izZ" secondAttribute="bottom" id="ETl-C8-x3f"/>
                             <constraint firstItem="9Ul-qG-16M" firstAttribute="height" secondItem="kih-4l-izZ" secondAttribute="height" multiplier="0.2" id="H3l-Ib-PMj"/>
+                            <constraint firstItem="JAk-HD-avL" firstAttribute="leading" secondItem="62C-T9-Sx5" secondAttribute="leading" id="Kwi-hf-M4d"/>
                             <constraint firstItem="9Ul-qG-16M" firstAttribute="width" secondItem="kih-4l-izZ" secondAttribute="width" multiplier="0.4" id="MJj-Lp-d6y"/>
                             <constraint firstItem="IAX-rM-0nL" firstAttribute="width" secondItem="kih-4l-izZ" secondAttribute="width" multiplier="0.4" id="OvL-em-hig"/>
+                            <constraint firstItem="WgZ-he-GmC" firstAttribute="centerY" secondItem="JAk-HD-avL" secondAttribute="centerY" id="Pku-9A-Jlm"/>
                             <constraint firstItem="K8Z-oP-AUz" firstAttribute="bottom" secondItem="9Ul-qG-16M" secondAttribute="bottom" constant="16" id="Pxf-nI-qSI"/>
+                            <constraint firstItem="JAk-HD-avL" firstAttribute="top" secondItem="62C-T9-Sx5" secondAttribute="bottom" constant="16" id="QUU-uq-XVn"/>
                             <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IAX-rM-0nL" secondAttribute="trailing" symbolic="YES" id="RmD-kj-4LX"/>
                             <constraint firstItem="ztO-iM-t0z" firstAttribute="leading" secondItem="62C-T9-Sx5" secondAttribute="trailing" constant="8" id="UoV-wg-Zb9"/>
                             <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" secondItem="9Ul-qG-16M" secondAttribute="trailing" constant="16" id="YAS-9p-b8c"/>
@@ -61,6 +78,7 @@
                             <constraint firstItem="kih-4l-izZ" firstAttribute="top" secondItem="QH7-IC-Ucw" secondAttribute="top" id="hTu-8P-uLB"/>
                             <constraint firstItem="62C-T9-Sx5" firstAttribute="leading" secondItem="K8Z-oP-AUz" secondAttribute="leading" constant="8" id="nfd-Be-Vx6"/>
                             <constraint firstItem="IAX-rM-0nL" firstAttribute="height" secondItem="kih-4l-izZ" secondAttribute="height" multiplier="0.15" id="p2u-jD-Rq5"/>
+                            <constraint firstItem="WgZ-he-GmC" firstAttribute="leading" secondItem="JAk-HD-avL" secondAttribute="trailing" constant="8" id="tXu-wg-IY2"/>
                             <constraint firstItem="K8Z-oP-AUz" firstAttribute="bottom" secondItem="IAX-rM-0nL" secondAttribute="bottom" constant="16" id="vCf-Af-7ST"/>
                             <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" secondItem="kih-4l-izZ" secondAttribute="trailing" id="zMG-WL-6HL"/>
                         </constraints>
@@ -71,6 +89,7 @@
                         <outlet property="recognizeLabel" destination="ztO-iM-t0z" id="b9Y-Or-3dl"/>
                         <outlet property="resultImageView" destination="9Ul-qG-16M" id="AB8-fW-I88"/>
                         <outlet property="resultLabel" destination="IAX-rM-0nL" id="bu5-Yl-Ba6"/>
+                        <outlet property="speechLabel" destination="WgZ-he-GmC" id="s8i-xN-lZf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y2V-xF-dH3" sceneMemberID="firstResponder"/>
