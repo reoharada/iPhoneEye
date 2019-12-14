@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XDd-wd-1br">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="rXP-1O-PrB">
+            <objects>
+                <viewController id="XDd-wd-1br" customClass="ViewController" customModule="iPhoneEye" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QH7-IC-Ucw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kih-4l-izZ">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IAX-rM-0nL">
+                                <rect key="frame" x="16" y="711.5" width="165.5" height="134.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Ul-qG-16M">
+                                <rect key="frame" x="232.5" y="667" width="165.5" height="179"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="認識文字列：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="62C-T9-Sx5">
+                                <rect key="frame" x="8" y="60" width="104" height="21"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ztO-iM-t0z">
+                                <rect key="frame" x="120" y="70.5" width="0.0" height="0.0"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="IAX-rM-0nL" firstAttribute="leading" secondItem="K8Z-oP-AUz" secondAttribute="leading" constant="16" id="67U-kB-Rpd"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ztO-iM-t0z" secondAttribute="trailing" symbolic="YES" id="7gS-UC-v7P"/>
+                            <constraint firstItem="ztO-iM-t0z" firstAttribute="centerY" secondItem="62C-T9-Sx5" secondAttribute="centerY" id="8tP-jE-C5y"/>
+                            <constraint firstAttribute="bottom" secondItem="kih-4l-izZ" secondAttribute="bottom" id="ETl-C8-x3f"/>
+                            <constraint firstItem="9Ul-qG-16M" firstAttribute="height" secondItem="kih-4l-izZ" secondAttribute="height" multiplier="0.2" id="H3l-Ib-PMj"/>
+                            <constraint firstItem="9Ul-qG-16M" firstAttribute="width" secondItem="kih-4l-izZ" secondAttribute="width" multiplier="0.4" id="MJj-Lp-d6y"/>
+                            <constraint firstItem="IAX-rM-0nL" firstAttribute="width" secondItem="kih-4l-izZ" secondAttribute="width" multiplier="0.4" id="OvL-em-hig"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="bottom" secondItem="9Ul-qG-16M" secondAttribute="bottom" constant="16" id="Pxf-nI-qSI"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IAX-rM-0nL" secondAttribute="trailing" symbolic="YES" id="RmD-kj-4LX"/>
+                            <constraint firstItem="ztO-iM-t0z" firstAttribute="leading" secondItem="62C-T9-Sx5" secondAttribute="trailing" constant="8" id="UoV-wg-Zb9"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" secondItem="9Ul-qG-16M" secondAttribute="trailing" constant="16" id="YAS-9p-b8c"/>
+                            <constraint firstItem="62C-T9-Sx5" firstAttribute="top" secondItem="K8Z-oP-AUz" secondAttribute="top" constant="16" id="d6I-AN-Mkk"/>
+                            <constraint firstItem="kih-4l-izZ" firstAttribute="leading" secondItem="K8Z-oP-AUz" secondAttribute="leading" id="dgC-0i-amN"/>
+                            <constraint firstItem="kih-4l-izZ" firstAttribute="top" secondItem="QH7-IC-Ucw" secondAttribute="top" id="hTu-8P-uLB"/>
+                            <constraint firstItem="62C-T9-Sx5" firstAttribute="leading" secondItem="K8Z-oP-AUz" secondAttribute="leading" constant="8" id="nfd-Be-Vx6"/>
+                            <constraint firstItem="IAX-rM-0nL" firstAttribute="height" secondItem="kih-4l-izZ" secondAttribute="height" multiplier="0.15" id="p2u-jD-Rq5"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="bottom" secondItem="IAX-rM-0nL" secondAttribute="bottom" constant="16" id="vCf-Af-7ST"/>
+                            <constraint firstItem="K8Z-oP-AUz" firstAttribute="trailing" secondItem="kih-4l-izZ" secondAttribute="trailing" id="zMG-WL-6HL"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="K8Z-oP-AUz"/>
+                    </view>
+                    <connections>
+                        <outlet property="cameraView" destination="kih-4l-izZ" id="VOp-G1-ijL"/>
+                        <outlet property="recognizeLabel" destination="ztO-iM-t0z" id="b9Y-Or-3dl"/>
+                        <outlet property="resultImageView" destination="9Ul-qG-16M" id="AB8-fW-I88"/>
+                        <outlet property="resultLabel" destination="IAX-rM-0nL" id="bu5-Yl-Ba6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Y2V-xF-dH3" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-170" y="85"/>
+        </scene>
+    </scenes>
+</document>
