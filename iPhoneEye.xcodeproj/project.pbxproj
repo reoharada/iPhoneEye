@@ -16,7 +16,7 @@
 		7F1F500323A48E20002A118B /* iPhoneEyeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F500223A48E20002A118B /* iPhoneEyeTests.swift */; };
 		7F1F500E23A48E20002A118B /* iPhoneEyeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1F500D23A48E20002A118B /* iPhoneEyeUITests.swift */; };
 		7F809B2623A4B38D004BEE26 /* iPhoneEyeCIDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F809B2523A4B38D004BEE26 /* iPhoneEyeCIDetector.swift */; };
-		7F809B2823A4BD34004BEE26 /* ImageClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7F809B2723A4BD33004BEE26 /* ImageClassifier.mlmodel */; };
+		7FB9E1DF23A4D8ED0017B705 /* ImageClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7FB9E1DE23A4D8ED0017B705 /* ImageClassifier.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,7 @@
 		7F1F500D23A48E20002A118B /* iPhoneEyeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhoneEyeUITests.swift; sourceTree = "<group>"; };
 		7F1F500F23A48E20002A118B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7F809B2523A4B38D004BEE26 /* iPhoneEyeCIDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhoneEyeCIDetector.swift; sourceTree = "<group>"; };
-		7F809B2723A4BD33004BEE26 /* ImageClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageClassifier.mlmodel; sourceTree = "<group>"; };
+		7FB9E1DE23A4D8ED0017B705 /* ImageClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageClassifier.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +103,7 @@
 		7F1F4FEA23A48E1E002A118B /* iPhoneEye */ = {
 			isa = PBXGroup;
 			children = (
-				7F809B2723A4BD33004BEE26 /* ImageClassifier.mlmodel */,
+				7FB9E1DE23A4D8ED0017B705 /* ImageClassifier.mlmodel */,
 				7F1F4FEB23A48E1E002A118B /* AppDelegate.swift */,
 				7F1F4FED23A48E1E002A118B /* SceneDelegate.swift */,
 				7F1F4FEF23A48E1E002A118B /* ViewController.swift */,
@@ -269,7 +269,7 @@
 				7F1F4FEC23A48E1E002A118B /* AppDelegate.swift in Sources */,
 				7F1F4FEE23A48E1E002A118B /* SceneDelegate.swift in Sources */,
 				7F809B2623A4B38D004BEE26 /* iPhoneEyeCIDetector.swift in Sources */,
-				7F809B2823A4BD34004BEE26 /* ImageClassifier.mlmodel in Sources */,
+				7FB9E1DF23A4D8ED0017B705 /* ImageClassifier.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
