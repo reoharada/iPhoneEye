@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     var timerA: Timer!
     var timerB: Timer!
     var speechExcludeStr = "白い車"
+    let scale = CGFloat(400)
     
     /**** カメラ ****/
     var captureDevice = AVCaptureDevice.default(for: .video)
@@ -153,6 +154,7 @@ class ViewController: UIViewController {
     
     fileprivate func initMLSetting() {
         coreMLModel = try? VNCoreMLModel(for: ImageClassifier().model)
+//        coreMLModel = try? VNCoreMLModel(for: Resnet50().model)
         request = VNCoreMLRequest(model: coreMLModel, completionHandler: { (req, error) in
             if error != nil {
                 print(error)
@@ -183,16 +185,32 @@ class ViewController: UIViewController {
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print(beforeObserveThing)
-        guard let pixellBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            print("エラー")
-            return
-        }
-        if request != nil {
-            try? VNImageRequestHandler(cvPixelBuffer: pixellBuffer, options: [:]).perform([request])
-        }
         DispatchQueue.main.async {
+            print(self.beforeObserveThing)
+            guard let pixellBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+                print("エラー")
+                return
+            }
+            // クロップ処理
             let ciImage = CIImage(cvPixelBuffer: pixellBuffer)
+            let context = CIContext(options: nil)
+            if let cgImage = context.createCGImage(ciImage, from: ciImage.extent) {
+                let w = cgImage.width, h = cgImage.height
+                let rect = CGRect(x: (CGFloat(w)-self.scale)/2, y: (CGFloat(h)-self.scale)/2, width: self.scale, height: self.scale)
+                if let imageRef = cgImage.cropping(to: rect) {
+                    let cropImage = UIImage(cgImage: imageRef)
+                    self.resultImageView.image = cropImage
+                }
+                // 画像認識
+                let uiImage = UIImage(cgImage: cgImage)
+                if self.request != nil {
+                    if let pixelBuffer = uiImage.pixelBuffer() {
+                        try? VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:]).perform([self.request])
+                    }
+                }
+            }
+            // クロップ処理
+            // 人間認識
             let humanNumber = iPhoneEyeCIDetector.shareInstance.findHuman(ciImage)
             if humanNumber > 0 {
                 if self.beforeObserveThing != self.humanStr && self.enableHumanObserve {
@@ -215,5 +233,57 @@ extension AVSpeechSynthesizer {
             utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
             self.speak(utterance)
         }
+    }
+}
+
+extension UIImage {
+    func resize(to newSize: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: newSize.width, height: newSize.height), true, 1.0)
+        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+ 
+    func pixelBuffer() -> CVPixelBuffer? {
+        let width = self.size.width
+        let height = self.size.height
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue,
+                     kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        var pixelBuffer: CVPixelBuffer?
+        let status = CVPixelBufferCreate(kCFAllocatorDefault,
+                                         Int(width),
+                                         Int(height),
+                                         kCVPixelFormatType_32ARGB,
+                                         attrs,
+                                         &pixelBuffer)
+ 
+        guard let resultPixelBuffer = pixelBuffer, status == kCVReturnSuccess else {
+            return nil
+        }
+ 
+        CVPixelBufferLockBaseAddress(resultPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+        let pixelData = CVPixelBufferGetBaseAddress(resultPixelBuffer)
+ 
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let context = CGContext(data: pixelData,
+                                      width: Int(width),
+                                      height: Int(height),
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: CVPixelBufferGetBytesPerRow(resultPixelBuffer),
+                                      space: rgbColorSpace,
+                                      bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue) else {
+                                        return nil
+        }
+ 
+        context.translateBy(x: 0, y: height)
+        context.scaleBy(x: 1.0, y: -1.0)
+ 
+        UIGraphicsPushContext(context)
+        self.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
+        UIGraphicsPopContext()
+        CVPixelBufferUnlockBaseAddress(resultPixelBuffer, CVPixelBufferLockFlags(rawValue: 0))
+ 
+        return resultPixelBuffer
     }
 }
