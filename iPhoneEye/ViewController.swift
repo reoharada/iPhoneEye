@@ -24,6 +24,12 @@ class ViewController: UIViewController {
     
     var beforeObserveThing = ""
     let humanStr = "人間"
+    let observeTimeInterval = TimeInterval(5)
+    var enableObserve = true
+    var enableHumanObserve = true
+    var timerA: Timer!
+    var timerB: Timer!
+    var speechExcludeStr = "白い車"
     
     /**** カメラ ****/
     var captureDevice = AVCaptureDevice.default(for: .video)
@@ -52,7 +58,7 @@ class ViewController: UIViewController {
     
     /**** 発声 ****/
     let synthesizer = AVSpeechSynthesizer()
-    let appStartVoice = "スタートとするときは起動といってください"
+    let appStartVoice = "スタートするときは起動といってください"
     /**** 発声 ****/
     
     override func viewDidLoad() {
@@ -66,6 +72,21 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         synthesizer.speechWithJP(appStartVoice)
     }
+    
+    func startTimerA() {
+        enableObserve = false
+        timerA = Timer.scheduledTimer(withTimeInterval: observeTimeInterval, repeats: false, block: { (ti) in
+            self.enableObserve = true
+        })
+    }
+    
+    func startTimerB() {
+        enableHumanObserve = false
+        timerB = Timer.scheduledTimer(withTimeInterval: observeTimeInterval+1, repeats: false, block: { (ti) in
+            self.enableHumanObserve = true
+        })
+    }
+
     
     fileprivate func initSpeechRecognizer() {
         SFSpeechRecognizer.requestAuthorization { (status) in
@@ -146,8 +167,9 @@ class ViewController: UIViewController {
                     let dataName = prefixData.first!.identifier.components(separatedBy: ",")[0]
                     self.resultImageView.image = UIImage(named: dataName)
                     self.resultImageView.alpha = CGFloat(prefixData.first!.confidence)
-                    if self.beforeObserveThing != dataName {
-                        let speechText = "3メートル先に"+dataName+"があります"
+                    if self.beforeObserveThing != dataName && self.enableObserve && dataName != self.speechExcludeStr {
+                        self.startTimerA()
+                        let speechText = "1メートル先に"+dataName
                         self.speechLabel.text = speechText
                         self.synthesizer.speechWithJP(speechText)
                         self.beforeObserveThing = dataName
@@ -161,6 +183,7 @@ class ViewController: UIViewController {
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        print(beforeObserveThing)
         guard let pixellBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             print("エラー")
             return
@@ -172,7 +195,8 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             let ciImage = CIImage(cvPixelBuffer: pixellBuffer)
             let humanNumber = iPhoneEyeCIDetector.shareInstance.findHuman(ciImage)
             if humanNumber > 0 {
-                if self.beforeObserveThing != self.humanStr {
+                if self.beforeObserveThing != self.humanStr && self.enableHumanObserve {
+                    self.startTimerB()
                     self.beforeObserveThing = self.humanStr
                     let speechText = "前方に\(humanNumber)人の人間がいます"
                     self.synthesizer.speechWithJP(speechText)

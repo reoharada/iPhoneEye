@@ -14,6 +14,9 @@ class iPhoneEyeCIDetector {
     
     func findHuman(_ image: CIImage) -> Int {
         let faces = detector.features(in: image)
+        faces.forEach { (feat) in
+            print(feat.bounds)
+        }
         return faces.count
     }
     
